@@ -63,6 +63,7 @@ const css = (selector, property, value) => {
         elements.style[property] = value;
     }
 };
+// hàm RandomColor trả về một màu ngẫu nhiên từ một mảng các màu
 const RandomColor = () => {
     const colors = [
         "#bd93f9",
@@ -76,20 +77,27 @@ const RandomColor = () => {
     ]
     return colors[Math.floor(Math.random() * colors.length)];
 };
-
+// Hàm log để in ra giá trị của một biến hoặc một đối tượng JSON dưới dạng code hiển thị trên website
 const log = (data) => {
+    // Kiểm tra nếu giá trị là undefined thì throw error
     if (data === undefined) {
         throw new Error("Giá trị không thể là undefined");
     } else {
+        // Tạo các phần tử pre và code
         const preElement = html("pre");
         const codeElement = html("code");
         let Data;
+
+        // Nếu data là mảng hoặc đối tượng thì sử dụng JSON.stringify để hiển thị nó
         if (Array.isArray(data) || typeof data === "object") {
             Data = JSON.stringify(data, null, 2);
             codeElement.innerText = Data;
         } else {
+            // Nếu không phải thì hiển thị data dưới dạng string và highlight nó
             Data = String(data);
             preElement.classList.add("code");
+
+            // Các từ khóa và giá trị được highlight
             const words = {
                 Error: { color: "#ff5555" },
                 Array: { color: "#8be9fd" },
@@ -117,11 +125,17 @@ const log = (data) => {
                 undefined: { color: "#ffb86c" },
                 string: { color: "#f1fa8c" },
             };
+
+            // Sử dụng regex để tìm kiếm các từ cần highlight
             const regex = new RegExp(
                 Object.keys(words).join("|") + "|[^\w\s]",
                 "gi"
             );
+
+            // Sử dụng stack để theo dõi màu highlight của các cặp ngoặc
             const stack = [];
+
+            // Highlight các từ và ký tự đặc biệt trong data
             const highlightedData = Data.replace(regex, (match) => {
                 if (words.hasOwnProperty(match)) {
                     return `<span style="color:${words[match].color}">${match}</span>`;
@@ -138,8 +152,12 @@ const log = (data) => {
                     return match;
                 }
             });
+
+            // Đưa dữ liệu đã được highlight vào trong phần tử code
             codeElement.innerHTML = highlightedData;
         }
+
+        // Đưa phần tử code vào trong phần tử pre và đưa pre vào trong body của trang web
         preElement.appendChild(codeElement);
         $("body").appendChild(preElement);
     }

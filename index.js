@@ -21,19 +21,3 @@ log("Hello, world!"); // Hiển thị chuỗi "Hello, world!" trong một thẻ 
 log([1, 2, 3]); // Hiển thị một mảng các số trong một thẻ pre có định dạng JSON
 */
 log(log);
-const colors = [
-    "#bd93f9",
-    "#ff6bcb",
-    "#191a2e",
-    "#f8f8f2",
-    "#6272a4",
-    "#44475a",
-    "#191a21",
-    "#21222c", 
-    "#343746",
-    "#424450",
-    "#282a36",
-    "#20E3B2",
-    "#9a86fd",
-    "#ff5555",
-]
