@@ -87,7 +87,6 @@ const log = (data) => {
         const preElement = html("pre");
         const codeElement = html("code");
         let Data;
-
         // Nếu data là mảng hoặc đối tượng thì sử dụng JSON.stringify để hiển thị nó
         if (Array.isArray(data) || typeof data === "object") {
             Data = JSON.stringify(data, null, 2);
@@ -96,7 +95,6 @@ const log = (data) => {
             // Nếu không phải thì hiển thị data dưới dạng string và highlight nó
             Data = String(data);
             preElement.classList.add("code");
-
             // Các từ khóa và giá trị được highlight
             const words = {
                 Error: { color: "#ff5555" },
@@ -125,16 +123,13 @@ const log = (data) => {
                 undefined: { color: "#ffb86c" },
                 string: { color: "#f1fa8c" },
             };
-
             // Sử dụng regex để tìm kiếm các từ cần highlight
             const regex = new RegExp(
                 Object.keys(words).join("|") + "|[^\w\s]",
                 "gi"
             );
-
             // Sử dụng stack để theo dõi màu highlight của các cặp ngoặc
             const stack = [];
-
             // Highlight các từ và ký tự đặc biệt trong data
             const highlightedData = Data.replace(regex, (match) => {
                 if (words.hasOwnProperty(match)) {
@@ -152,15 +147,12 @@ const log = (data) => {
                     return match;
                 }
             });
-
             // Đưa dữ liệu đã được highlight vào trong phần tử code
             codeElement.innerHTML = highlightedData;
         }
-
         // Đưa phần tử code vào trong phần tử pre và đưa pre vào trong body của trang web
         preElement.appendChild(codeElement);
         $("body").appendChild(preElement);
     }
 };
-
 export { $, $$, html, css, log };
