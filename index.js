@@ -1,4 +1,4 @@
-import { $, $$, html, css, log } from "./utils.js";
+import { $, $$, html, css, log } from "./lib/Utils/utils.js";
 /*
 1.Sử dụng hàm $ để tìm phần tử HTML đầu tiên khớp với CSS selector:
 const firstElement = $("h1");
@@ -20,4 +20,4 @@ css("#header", "font-size", "24px"); // Đặt kích thước chữ của phần
 log("Hello, world!"); // Hiển thị chuỗi "Hello, world!" trong một thẻ div có class "code"
 log([1, 2, 3]); // Hiển thị một mảng các số trong một thẻ pre có định dạng JSON
 */
-log(log);
+log(log)
