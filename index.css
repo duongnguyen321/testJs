@@ -13,6 +13,9 @@
 ::selection {
   background-color: #baa4da25;
 }
+html{
+  scroll-behavior: smooth;
+}
 body {
   min-height: 100vh;
   width: 100%;

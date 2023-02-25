@@ -20,4 +20,5 @@ css("#header", "font-size", "24px"); // Đặt kích thước chữ của phần
 log("Hello, world!"); // Hiển thị chuỗi "Hello, world!" trong một thẻ div có class "code"
 log([1, 2, 3]); // Hiển thị một mảng các số trong một thẻ pre có định dạng JSON
 */
-log(log)
+const array = [true, false, 1, 2, 3, "string", null, undefined, NaN, Infinity, {}, [], Symbol("symbol")];
+log(array)
