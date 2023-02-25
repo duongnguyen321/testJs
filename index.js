@@ -9,7 +9,7 @@ const allElements = $$("p");
 console.log(allElements); // In ra một mảng chứa tất cả các phần tử HTML có thẻ <p>
 
 3.Sử dụng hàm html để tạo một phần tử HTML mới và thêm nội dung vào trong đó:
-const newElement = html("div", "Đây là nội dung của phần tử div mới");
+const newElement = html("div","class", "Đây là nội dung của phần tử div mới");
 console.log(newElement); // In ra phần tử HTML mới vừa được tạo
 
 4.Sử dụng hàm css để thay đổi thuộc tính CSS của một hoặc nhiều phần tử HTML:

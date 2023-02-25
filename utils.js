@@ -2,7 +2,7 @@
 const $ = (selector, errorMessage) => {
     // Kiểm tra selector có phải là một chuỗi hợp lệ
     if (typeof selector !== "string" || selector.trim() === "") {
-        throw new Error("Invalid selector");
+        html("h1", "error", "Invalid selector");
     }
     const element = document.querySelector(selector);
     // Nếu không tìm thấy phần tử, ném ra lỗi với thông báo được cung cấp hoặc mặc định
@@ -18,7 +18,7 @@ const $ = (selector, errorMessage) => {
 const $$ = (selector, errorMessage) => {
     // Kiểm tra selector có phải là một chuỗi hợp lệ
     if (typeof selector !== "string" || selector.trim() === "") {
-        throw new Error("Invalid selector");
+        html("h1", "error", "Invalid selector");
     }
     const elements = document.querySelectorAll(selector);
     // Nếu không tìm thấy phần tử, ném ra lỗi với thông báo được cung cấp hoặc mặc định
@@ -31,16 +31,20 @@ const $$ = (selector, errorMessage) => {
     return Array.from(elements);
 };
 // Hàm html nhận vào một tên thẻ HTML và một chuỗi văn bản (tùy chọn)
-const html = (tag, text) => {
+const html = (tag, className, text) => {
     // Nếu tên thẻ không hợp lệ, ném ra lỗi
     if (!tag || typeof tag !== "string") {
-        throw new Error("Invalid tag name");
+        html("h1", "error", "Invalid tag name");
     }
     // Tạo một phần tử với tên thẻ được cung cấp
     const element = document.createElement(tag);
     // Nếu có chuỗi văn bản được cung cấp, thiết lập nội dung cho phần tử
     if (text) {
         element.textContent = text;
+    }
+    // Nếu có tên lớp được cung cấp, thêm lớp cho phần tử
+    if (className) {
+        element.classList.add(className);
     }
     // Thêm phần tử vào cuối thẻ body và trả về phần tử
     $("body").appendChild(element);
@@ -79,23 +83,32 @@ const RandomColor = () => {
 };
 // Hàm log để in ra giá trị của một biến hoặc một đối tượng JSON dưới dạng code hiển thị trên website
 const log = (data) => {
-    // Kiểm tra nếu giá trị là undefined thì throw error
     if (data === undefined) {
-        throw new Error("Giá trị không thể là undefined");
+        // Nếu giá trị truyền vào là undefined thì throw error
+        html("h1", "error", "data cannot be undefined");
     } else {
-        // Tạo các phần tử pre và code
+        // Tạo phần tử pre và code để chứa dữ liệu
         const preElement = html("pre");
         const codeElement = html("code");
         let Data;
-        // Nếu data là mảng hoặc đối tượng thì sử dụng JSON.stringify để hiển thị nó
+        // Kiểm tra xem data có phải là JSON hay không
+        try {
+            JSON.parse(data);
+            Data = JSON.stringify(JSON.parse(data), null, 2);
+        } catch (error) {
+            // Nếu không phải JSON, kiểm tra xem data có phải là Array hoặc Object không
+            if (Array.isArray(data) || typeof data === "object") {
+                Data = JSON.stringify(data, null, 2);
+            } else {
+                Data = String(data);
+            }
+        }
+        // Nếu data là Array hoặc Object, in ra theo định dạng JSON
         if (Array.isArray(data) || typeof data === "object") {
-            Data = JSON.stringify(data, null, 2);
             codeElement.innerText = Data;
         } else {
-            // Nếu không phải thì hiển thị data dưới dạng string và highlight nó
-            Data = String(data);
+            // Nếu không phải Array hoặc Object, chuyển đổi data sang String và highlight các từ khóa
             preElement.classList.add("code");
-            // Các từ khóa và giá trị được highlight
             const words = {
                 Error: { color: "#ff5555" },
                 Array: { color: "#8be9fd" },
@@ -123,18 +136,17 @@ const log = (data) => {
                 undefined: { color: "#ffb86c" },
                 string: { color: "#f1fa8c" },
             };
-            // Sử dụng regex để tìm kiếm các từ cần highlight
             const regex = new RegExp(
                 Object.keys(words).join("|") + "|[^\w\s]",
                 "gi"
             );
-            // Sử dụng stack để theo dõi màu highlight của các cặp ngoặc
             const stack = [];
-            // Highlight các từ và ký tự đặc biệt trong data
             const highlightedData = Data.replace(regex, (match) => {
                 if (words.hasOwnProperty(match)) {
+                    // Nếu match là từ khóa thì highlight nó
                     return `<span style="color:${words[match].color}">${match}</span>`;
                 } else if (/[(){}\[\]]/.test(match)) {
+                    // Nếu match là dấu ngoặc hoặc dấu ngoặc vuông, tạo random màu cho chúng
                     let randomColor = RandomColor();
                     if (match === "(" || match === "{" || match === "[") {
                         stack.push(randomColor);
@@ -144,13 +156,13 @@ const log = (data) => {
                         return `<span style="color:${color}">${match}</span>`;
                     }
                 } else {
+                    // Nếu không phải trường hợp nào trên thì trả lại match
                     return match;
                 }
             });
-            // Đưa dữ liệu đã được highlight vào trong phần tử code
             codeElement.innerHTML = highlightedData;
         }
-        // Đưa phần tử code vào trong phần tử pre và đưa pre vào trong body của trang web
+        // Append phần tử code vào phần tử pre, sau đó append pre vào body
         preElement.appendChild(codeElement);
         $("body").appendChild(preElement);
     }
